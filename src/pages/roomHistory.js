@@ -13,7 +13,7 @@ import api from "../services/api";
 const Item = ({ temp, humid, date }) => {
   const dataRegistro = new Date(date);
   var dataString =
-    ("0" + dataRegistro.getDay()).slice(-2) +
+    ("0" + dataRegistro.getDate()).slice(-2) +
     "/" +
     (dataRegistro.getMonth() + 1) +
     "/" +
@@ -31,8 +31,8 @@ const Item = ({ temp, humid, date }) => {
         </Text>
       </View>
       <View style={styles.infoContainer}>
-        <Text style={styles.itemText}>Temperatura: {temp}º</Text>
-        <Text style={styles.itemText}>Umidade: {humid}%</Text>
+        <Text style={styles.itemText}>Temperatura Máxima: {temp}º</Text>
+        <Text style={styles.itemText}>Temperatura Minima: {humid}%</Text>
       </View>
     </View>
   );
@@ -115,8 +115,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderRadius: 10,
   },
-  dateContainer: {},
   infoContainer: {
-    width: "50%",
+    width: "60%",
   },
 });

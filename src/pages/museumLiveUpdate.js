@@ -5,6 +5,9 @@ import {
   View,
   TouchableNativeFeedback,
   ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  RefreshControl
 } from "react-native";
 import api from "../services/api";
 import { useNavigation } from "@react-navigation/native";
@@ -20,6 +23,20 @@ export default function RoomHistory() {
         setMuseuData(response.data);
       });
   });
+
+  const wait = (timeout) => {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   const dataAtual = new Date();
 
@@ -57,8 +74,12 @@ export default function RoomHistory() {
     );
   } else {
     return (
-      <View style={styles.main}>
-        <View>
+      <SafeAreaView style={styles.main}>
+        <ScrollView
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
           <View style={styles.userContainer}>
             <Text style={styles.h1}>Olá, Museu user</Text>
             <View>
@@ -67,9 +88,11 @@ export default function RoomHistory() {
                   fontWeight: "bold",
                 }}
               >
-                {dataAtual.getDate()}/{dataAtual.getMonth()+1}
+                {dataAtual.getDate()}/{dataAtual.getMonth() + 1}
               </Text>
-              <Text>{dataAtual.getHours()}h{dataAtual.getMinutes()}</Text>
+              <Text>
+                {dataAtual.getHours()}h{dataAtual.getMinutes()}
+              </Text>
             </View>
           </View>
 
@@ -200,8 +223,8 @@ export default function RoomHistory() {
               </View>
             )}
           </View>
-        </View>
-      </View>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
@@ -212,7 +235,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
-    backgroundColor: "#f3f5f5"
+    backgroundColor: "#f3f5f5",
   },
   h1: {
     width: "50%",
