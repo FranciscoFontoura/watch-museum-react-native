@@ -34,7 +34,13 @@ export default function RoomHistory() {
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-
+    setMuseuData(() => {
+      api
+        .get("1218298/feeds.json?api_key=XRQD7C1VLCSHF0DD&results=1")
+        .then((response) => {
+          setMuseuData(response.data);
+        });
+    });;
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
